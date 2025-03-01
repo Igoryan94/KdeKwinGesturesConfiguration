@@ -1,0 +1,275 @@
+# https://github.com/taj-ny/kwin-gestures
+
+touchpad:
+  speed:
+    swipe_threshold: 4
+
+  gestures:
+
+    #######
+    ## Global
+    #######
+
+    - type: pinch
+      fingers: 2
+      direction: out  # Растяжение (увеличение масштаба)
+
+      # conditions:
+      #   negate:
+      #     - window_class: jetbrains-studio
+
+      actions:
+        # - on: update
+        - on: begin
+          command: xdotool key ctrl+plus  # Увеличение масштаба
+
+        - on: end
+          command: xdotool key ctrl+plus
+
+    - type: pinch
+      fingers: 2
+      direction: in  # Сжатие (уменьшение масштаба)
+
+      # conditions:
+      #   negate:
+      #     - window_class: jetbrains-studio
+
+      actions:
+        # - on: update
+          # interval: 0.02
+        - on: begin
+          command: xdotool key ctrl+minus  # Уменьшение масштаба
+
+        # - on: end
+        #   command: xdotool key ctrl+minus
+
+    # - type: hold
+    #   fingers: 2
+    #   threshold: 0.01 # Очень маленький порог, почти как тап
+    #
+    #   actions: # TODO!
+    #     - on: begin
+    #       command: powerprofilesctl set performance
+
+    # Power profile cycle on hold 3 fingers
+    - type: hold
+      fingers: 3
+      threshold: 200
+
+      actions:
+        - on: begin
+          command: xdotool key super+b
+          # command: powerprofilesctl set power-saver
+
+        - on: update
+          interval: 600
+          command: xdotool key super+b
+
+          # command: |
+          #   pf=/home/igor/.tmp_power_prof.pid
+          #   lavg=/home/igor/bin/get_load_avg
+          #   pid=$(cat $pf)
+          #   cur_prof=$(powerprofilesctl get)
+          #   if [ -n "$pid" ] && (( pid > 0 )) && [ "$cur_prof" != "balanced" ]; then
+          #     kill -9 $pid
+          #     rm $pf
+          #
+          #     # load=$($lavg)
+          #     # if (( load >= 400 )); then
+          #     #   powerprofilesctl set performance
+          #     # else
+          #       powerprofilesctl set balanced
+          #     # fi
+          #   else
+          #     powerprofilesctl set performance
+          #     (
+          #       sleep 25
+          #
+          #       load=$($lavg)
+          #       while (( load > 400 )); do
+          #         sleep 4
+          #         load=$($lavg)
+          #       done
+          #
+          #       powerprofilesctl set balanced
+          #
+          #       sleep 15
+          #
+          #       load=$($lavg)
+          #       while (( load > 167 )); do
+          #         sleep 4
+          #         load=$($lavg)
+          #       done
+          #
+          #       powerprofilesctl set power-saver
+          #       rm $pf
+          #     ) & echo $! >$pf
+          #   fi
+
+    # Open Grid
+    - type: swipe
+      fingers: 3
+      direction: up
+      # speed: fast
+
+      actions:
+        - on: begin
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Grid View"
+
+    # Open Overview
+    - type: swipe
+      fingers: 3
+      direction: down
+      # speed: fast
+
+      actions:
+        - on: begin
+          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Cube"
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "ExposeAll"
+          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Expose"
+          # input:
+          #   - mouse:
+          #     move_to: 960 540
+
+    # Desktop switching
+    - type: swipe
+      direction: left_right
+      fingers: 3
+      # speed: fast
+      threshold: 60
+
+      actions:
+        - on: update
+          interval: -40
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Switch to Next Desktop"
+
+        - on: update
+          interval: 40
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Switch to Previous Desktop"
+
+    # Quick window switching # TODO заменить...
+    # - type: swipe
+    #   direction: left_right
+    #   fingers: 3
+    #   speed: slow
+    #   threshold: 25
+    #
+    #   actions:
+    #     - on: update
+    #       interval: -60
+    #       command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Walk Through Windows"
+    #
+    #     - on: update
+    #       interval: 60
+    #       command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Walk Through Windows"
+
+    # Volume via fast swipes
+    - type: swipe
+      fingers: 4
+      direction: left_right
+      speed: fast
+
+      actions:
+        - on: update
+          interval: -4
+          command: pactl set-sink-volume @DEFAULT_SINK@ +2%
+
+        - on: update
+          interval: 4
+          command: pactl set-sink-volume @DEFAULT_SINK@ -2%
+
+    # Brightness via slow swipes
+    - type: swipe
+      fingers: 4
+      direction: left_right
+      speed: slow
+
+      actions:
+        - on: update
+          interval: -4
+          command: brightnessctl s 1%+
+
+        - on: update
+          interval: 4
+          command: brightnessctl s 1%-
+
+    ### -Runner-on-hold-4-fingers
+    # Menu on hold 4 fingers
+    - type: hold
+      fingers: 4
+      threshold: 250
+
+      actions:
+        - on: begin
+          # plasma_shortcut: org_kde_krunner_desktop,_launch
+          command: xdotool key super
+
+
+
+    #######
+    ## App-specific
+    #######
+
+    # Brave, Dolphin FM: go back (swipe right)
+    - type: swipe
+      block_other: true
+      direction: right
+      fingers: 3
+
+      actions:
+        - on: begin
+          input:
+            - keyboard: [ leftalt+left ]  # Alt + Стрелка влево для "назад"
+
+      conditions:
+        - window_class: brave-browser
+        - window_class: dolphin
+
+    # Brave: go forward (swipe left)
+    - type: swipe
+      block_other: true
+      direction: left
+      fingers: 3
+
+      actions:
+        - on: begin
+          input:
+            - keyboard: [ leftalt+right ]  # Alt + Стрелка вправо для "вперёд"
+
+      conditions:
+        - window_class: brave-browser
+        - window_class: dolphin
+
+    # Android Studio
+    # - type: pinch
+    #   # block_other: true
+    #   fingers: 2
+    #   direction: out  # Растяжение (увеличение масштаба)
+    #
+    #   conditions:
+    #     - window_class: jetbrains-studio
+    #
+    #   actions:
+    #     # - on: update
+    #     - on: begin
+    #       command: xdotool key ctrl+shift+plus  # Увеличение масштаба
+    #
+    #     # - on: end
+    #     #   command: xdotool key ctrl+shift+plus
+    #
+    # - type: pinch
+    #   # block_other: true
+    #   fingers: 2
+    #   direction: in  # Сжатие (уменьшение масштаба)
+    #
+    #   conditions:
+    #     - window_class: jetbrains-studio
+    #
+    #   actions:
+    #     # - on: update
+    #       # interval: 0.02
+    #     - on: begin
+    #       command: xdotool key ctrl+shift+minus  # Уменьшение масштаба
+    #
+    #     # - on: end
+    #     #   command: xdotool key ctrl+minus
