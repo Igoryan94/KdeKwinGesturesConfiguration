@@ -114,7 +114,10 @@ touchpad:
 
       actions:
         - on: begin
-          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Grid View"
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Overview"
+          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Cube"
+          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "ExposeAll"
+          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Expose"
 
     # Open Overview
     - type: swipe
@@ -124,12 +127,7 @@ touchpad:
 
       actions:
         - on: begin
-          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Cube"
-          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "ExposeAll"
-          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Expose"
-          # input:
-          #   - mouse:
-          #     move_to: 960 540
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Grid View"
 
     # Desktop switching
     - type: swipe
