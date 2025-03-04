@@ -65,47 +65,6 @@ touchpad:
           interval: 600
           command: xdotool key super+b
 
-          # command: |
-          #   pf=/home/igor/.tmp_power_prof.pid
-          #   lavg=/home/igor/bin/get_load_avg
-          #   pid=$(cat $pf)
-          #   cur_prof=$(powerprofilesctl get)
-          #   if [ -n "$pid" ] && (( pid > 0 )) && [ "$cur_prof" != "balanced" ]; then
-          #     kill -9 $pid
-          #     rm $pf
-          #
-          #     # load=$($lavg)
-          #     # if (( load >= 400 )); then
-          #     #   powerprofilesctl set performance
-          #     # else
-          #       powerprofilesctl set balanced
-          #     # fi
-          #   else
-          #     powerprofilesctl set performance
-          #     (
-          #       sleep 25
-          #
-          #       load=$($lavg)
-          #       while (( load > 400 )); do
-          #         sleep 4
-          #         load=$($lavg)
-          #       done
-          #
-          #       powerprofilesctl set balanced
-          #
-          #       sleep 15
-          #
-          #       load=$($lavg)
-          #       while (( load > 167 )); do
-          #         sleep 4
-          #         load=$($lavg)
-          #       done
-          #
-          #       powerprofilesctl set power-saver
-          #       rm $pf
-          #     ) & echo $! >$pf
-          #   fi
-
     # Open Grid
     - type: swipe
       fingers: 3
@@ -129,22 +88,6 @@ touchpad:
         - on: begin
           command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Grid View"
 
-    # Desktop switching
-    - type: swipe
-      direction: left_right
-      fingers: 3
-      # speed: fast
-      threshold: 60
-
-      actions:
-        - on: update
-          interval: -40
-          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Switch to Next Desktop"
-
-        - on: update
-          interval: 40
-          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Switch to Previous Desktop"
-
     # Quick window switching # TODO заменить...
     # - type: swipe
     #   direction: left_right
@@ -160,6 +103,20 @@ touchpad:
     #     - on: update
     #       interval: 60
     #       command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Walk Through Windows"
+
+    # Desktop switching
+    - type: swipe
+      direction: left_right
+      fingers: 4
+
+      actions:
+        - on: update
+          interval: -65
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Switch to Next Desktop"
+
+        - on: update
+          interval: 65
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Switch to Previous Desktop"
 
     # Volume via fast swipes
     - type: swipe
