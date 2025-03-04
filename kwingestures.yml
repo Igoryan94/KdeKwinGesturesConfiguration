@@ -114,9 +114,9 @@ touchpad:
 
       actions:
         - on: begin
-          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Overview"
+          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Overview"
           # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Cube"
-          # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "ExposeAll"
+          command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "ExposeAll"
           # command: qdbus6 org.kde.kglobalaccel /component/kwin invokeShortcut "Expose"
 
     # Open Overview
@@ -164,31 +164,31 @@ touchpad:
     # Volume via fast swipes
     - type: swipe
       fingers: 4
-      direction: left_right
+      direction: up_down
       speed: fast
 
       actions:
         - on: update
-          interval: -4
+          interval: 4
           command: pactl set-sink-volume @DEFAULT_SINK@ +2%
 
         - on: update
-          interval: 4
+          interval: -4
           command: pactl set-sink-volume @DEFAULT_SINK@ -2%
 
     # Brightness via slow swipes
     - type: swipe
       fingers: 4
-      direction: left_right
+      direction: up_down
       speed: slow
 
       actions:
         - on: update
-          interval: -4
+          interval: 4
           command: brightnessctl s 1%+
 
         - on: update
-          interval: 4
+          interval: -4
           command: brightnessctl s 1%-
 
     ### -Runner-on-hold-4-fingers
